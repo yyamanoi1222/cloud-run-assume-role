@@ -24,17 +24,21 @@ func (*gcp) GetIdentityToken() ([]byte, error) {
 	ctx := context.Background()
 	credentials, err := google.FindDefaultCredentials(ctx)
 	if err != nil {
+		fmt.Fprintf(os.Stderr, "err: %s", err)
 		return []byte(""), err
 	}
 
 	ts, err := idtoken.NewTokenSource(ctx, "test-aud", option.WithCredentials(credentials))
 	if err != nil {
+		fmt.Fprintf(os.Stderr, "err: %s", err)
 		return []byte(""), err
 	}
 	t, err := ts.Token()
 	if err != nil {
+		fmt.Fprintf(os.Stderr, "err: %s", err)
 		return []byte(""), err
 	}
+	fmt.Printf("token: %s", t.AccessToken)
 	return []byte(t.AccessToken), nil
 }
 
